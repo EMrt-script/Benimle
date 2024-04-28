@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Çıkma Teklifi</title>
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+        }
+        h2 {
+            font-size: 40px;
+            text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 40px #ffffff, 0 0 80px #aa00ff;
+            transition: all 1s;
+        }
+        h2.pink {
+            color: pink;
+            font-size: 60px;
+        }
+        .button-33, .red-button {
+            font-size: 24px;
+        }
+        .button-33 {
+            background-color: #c2fbd7;
+            border-radius: 100px;
+            box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px;
+            color: green;
+            cursor: pointer;
+            display: inline-block;
+            font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+            padding: 10px 30px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 250ms;
+            border: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+        .button-33:hover {
+            box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
+            transform: scale(1.05) rotate(-1deg);
+        }
+        .red-button {
+            background-color: #ff6666;
+            border-radius: 100px;
+            box-shadow: rgba(255, 102, 102, .2) 0 -25px 18px -14px inset,rgba(255, 102, 102, .15) 0 1px 2px,rgba(255, 102, 102, .15) 0 2px 4px,rgba(255, 102, 102, .15) 0 4px 8px,rgba(255, 102, 102, .15) 0 8px 16px,rgba(255, 102, 102, .15) 0 16px 32px;
+            color: white;
+            cursor: pointer;
+            display: inline-block;
+            font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+            padding: 10px 30px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 250ms;
+            border: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            position: relative;
+        }
+        .emoji-emoji {
+            position: absolute;
+            display: inline-block;
+            pointer-events: none;
+            font-size: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Benimle Çıkar mısın?</h2>
+        <button class="button-33" id="yes-btn" role="button">EVET</button>
+        <button class="red-button" id="runaway-btn" role="button">HAYIR</button>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script>
+        const yesButton = document.getElementById("yes-btn");
+        const runawayButton = document.getElementById("runaway-btn");
+
+        const createEmoji = () => {
+            const emojis = ["💗", "⭐", "🫀","💘"];
+            const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+            const newEmoji = document.createElement("span");
+            newEmoji.classList.add("emoji-emoji");
+            newEmoji.innerHTML = emoji;
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 100);
+            newEmoji.style.left = `${x}px`;
+            newEmoji.style.top = `${y}px`;
+            document.body.appendChild(newEmoji);
+            
+            // Rastgele animasyon hızı ve yönü ekle
+            const speed = Math.random() * 5 + 2; // Rastgele hız
+            const angle = Math.random() * 360; // Rastgele yön
+            anime({
+                targets: newEmoji,
+                translateX: `${Math.cos(angle) * 100}px`, // X ekseninde hareket
+                translateY: `${Math.sin(angle) * 100}px`, // Y ekseninde hareket
+                duration: `${speed * 1000}`, // Hareket süresi
+                easing: "linear", // Düzgün hareket
+                complete: () => newEmoji.remove() // Animasyon tamamlandığında emojiyi kaldır
+            });
+        };
+
+        let runawayTimer;
+
+        const moveRunawayButton = () => {
+            const top = getRandomNumber(window.innerHeight - runawayButton.offsetHeight);
+            const left = getRandomNumber(window.innerWidth - runawayButton.offsetWidth);
+            anime({
+                targets: runawayButton,
+                left: `${left}px`,
+                top: `${top}px`,
+                easing: "easeInOutQuad"
+            });
+        };
+
+        const startRunawayTimer = () => {
+            runawayTimer = setInterval(moveRunawayButton, 2000);
+        };
+
+        const stopRunawayTimer = () => {
+            clearInterval(runawayTimer);
+        };
+
+        startRunawayTimer();
+
+        ["mouseover", "click"].forEach(function (el) {
+            runawayButton.addEventListener(el, function (event) {
+                stopRunawayTimer();
+                const top = getRandomNumber(window.innerHeight - this.offsetHeight);
+                const left = getRandomNumber(window.innerWidth - this.offsetWidth);
+
+                anime({
+                    targets: this,
+                    left: `${left}px`,
+                    top: `${top}px`,
+                    easing: "easeOutCirc"
+                });
+            });
+        });
+
+        yesButton.addEventListener("click", () => {
+            for (let i = 0; i < 80; i++) {
+                createEmoji();
+            }
+            runawayButton.style.display = "none";
+            stopRunawayTimer();
+            document.querySelector("h2").innerHTML = "Seni Seviyorum <3";
+            document.querySelector("h2").classList.add("#FFB6C1");
+            document.body.style.backgroundColor = "#770737";
+        });
+
+        runawayButton.addEventListener("click", () => {
+            moveRunawayButton();
+            startRunawayTimer();
+        });
+
+        document.addEventListener("mousemove", () => {
+            if (runawayButton.style.display !== "none") {
+                stopRunawayTimer();
+            }
+        });
+
+        const getRandomNumber = (num) => {
+            return Math.floor(Math.random() * (num + 1));
+        };
+    </script>
+</body>
+</html>
